@@ -48,8 +48,8 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
     console.log('Writing file: ' + AGGREGATE_FILE + ' with ' +
       Object.keys(defaultMessages).length + ' keys');
     let aggregateTranslations = JSON.stringify(defaultMessages, null, 2);
-    const previousTranslations = fs.readFileSync(AGGREGATE_FILE, 'utf8');
-  
+    const previousTranslations = fs.existsSync(AGGREGATE_FILE) ? fs.readFileSync(AGGREGATE_FILE, 'utf8') : undefined;
+
     if (aggregateTranslations!==previousTranslations) {
       fs.writeFileSync(AGGREGATE_FILE, aggregateTranslations);
       console.log('Aggregating translations JSON complete!');
