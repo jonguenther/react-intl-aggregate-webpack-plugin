@@ -64,8 +64,14 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
     (0, _mkdirp.sync)(AGGREGATE_DIR);
     console.log('Writing file: ' + AGGREGATE_FILE + ' with ' + Object.keys(defaultMessages).length + ' keys');
     var aggregateTranslations = JSON.stringify(defaultMessages, null, 2);
-    fs.writeFileSync(AGGREGATE_FILE, aggregateTranslations);
-    console.log('Aggregating translations JSON complete!');
+    var previousTranslations = fs.readFileSync(AGGREGATE_FILE, 'utf8');
+
+    if (aggregateTranslations !== previousTranslations) {
+      fs.writeFileSync(AGGREGATE_FILE, aggregateTranslations);
+      console.log('Aggregating translations JSON complete!');
+    } else {
+      console.log('No translation changes detected');
+    }
     callback();
   });
 };
