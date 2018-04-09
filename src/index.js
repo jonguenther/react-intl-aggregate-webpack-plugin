@@ -15,6 +15,7 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
                             '../../i18n/aggregate/';
   let aggregateFilename  = this.plugin_options.aggregateFilename ||
                             'en-US';
+  let format = this.plugin_options.format;
   let translatorFunction = this.plugin_options.translatorFunction;
 
   compiler.plugin('emit', function (compilation, callback) {
@@ -34,28 +35,38 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
           if (collection.hasOwnProperty(id)) {
             throw new Error(`Duplicate message id: ${id}`);
           }
-          collection[id] = {};
-          collection[id]["defaultMessage"] = translator ? translator.translate(defaultMessage) : defaultMessage;
-          if (description) {
-            collection[id].description = description;
+          const message = translator ? translator.translate(defaultMessage) : defaultMessage;
+          if (format === 'short') {
+            collection[id] = message;
+          } else {
+            collection[id] = {};
+            collection[id]["id"] = id;
+            collection[id]["defaultMessage"] = message;
+            if (description) {
+              collection[id].description = description;
+            }
           }
         });
         return collection;
       }, {});
 
-    console.log('Creating directory: ' + AGGREGATE_DIR);
-    mkdirpSync(AGGREGATE_DIR);
-    console.log('Writing file: ' + AGGREGATE_FILE + ' with ' +
-      Object.keys(defaultMessages).length + ' keys');
+    if (!fs.existsSync(AGGREGATE_DIR)) {
+      console.log('Creating directory: ' + AGGREGATE_DIR);
+      mkdirpSync(AGGREGATE_DIR);
+    }
+
     let aggregateTranslations = JSON.stringify(defaultMessages, null, 2);
     const previousTranslations = fs.existsSync(AGGREGATE_FILE) ? fs.readFileSync(AGGREGATE_FILE, 'utf8') : undefined;
-
+    
     if (aggregateTranslations!==previousTranslations) {
       fs.writeFileSync(AGGREGATE_FILE, aggregateTranslations);
-      console.log('Aggregating translations JSON complete!');
+      console.log('Writing file: ' + AGGREGATE_FILE + ' with ' +
+        Object.keys(defaultMessages).length + ' keys');
+
     } else {
-      console.log('No translation changes detected');
+      console.log('No translation changes detected for: ' + AGGREGATE_FILE);
     }
+    console.log('Aggregating translations JSON complete!');
     callback();
   });
 };
