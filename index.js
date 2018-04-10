@@ -50,7 +50,7 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
             description = _ref.description;
 
         if (collection.hasOwnProperty(id)) {
-          throw new Error('Duplicate message id: ' + id);
+          console.warn('Duplicate message id: ' + id);
         }
         var message = translator ? translator.translate(defaultMessage) : defaultMessage;
         if (format === 'short') {

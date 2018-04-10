@@ -33,7 +33,7 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
       .reduce((collection, descriptors) => {
         descriptors.forEach(({id, defaultMessage, description}) => {
           if (collection.hasOwnProperty(id)) {
-            throw new Error(`Duplicate message id: ${id}`);
+            console.warn(`Duplicate message id: ${id}`);
           }
           const message = translator ? translator.translate(defaultMessage) : defaultMessage;
           if (format === 'short') {
@@ -57,7 +57,7 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
 
     let aggregateTranslations = JSON.stringify(defaultMessages, null, 2);
     const previousTranslations = fs.existsSync(AGGREGATE_FILE) ? fs.readFileSync(AGGREGATE_FILE, 'utf8') : undefined;
-    
+
     if (aggregateTranslations!==previousTranslations) {
       fs.writeFileSync(AGGREGATE_FILE, aggregateTranslations);
       console.log('Writing file: ' + AGGREGATE_FILE + ' with ' +
