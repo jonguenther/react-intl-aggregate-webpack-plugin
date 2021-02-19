@@ -50,5 +50,3 @@ module.exports = config;
 - **`aggregateOutputDir`**: The target location where the plugin will output a `.json` file of the same basename corresponding to each aggregate file processed. Defaults to: `../../i18n/aggregate/`.
 
 - **`aggregateFilename`**: The name of the file to be output that will get `.json` appended to it. Defaults to: `en-US`.
-
-- **`translatorFunction`**: (optional) Allows you to pass a translator function to translate the message, receives the final message text as a parameter

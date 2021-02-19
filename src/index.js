@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {sync as globSync} from 'glob';
 import {sync as mkdirpSync} from 'mkdirp';
-import Translator from './lib/translator';
 
 function ReactIntlAggregatePlugin(plugin_options) {
   this.plugin_options = plugin_options;
@@ -15,8 +14,6 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
                             '../../i18n/aggregate/';
   let aggregateFilename  = this.plugin_options.aggregateFilename ||
                             'en-US';
-  let format = this.plugin_options.format;
-  let translatorFunction = this.plugin_options.translatorFunction;
 
   compiler.plugin('emit', function (compilation, callback) {
     const MESSAGES_PATTERN = path.resolve(__dirname, messagesPattern);
@@ -26,7 +23,6 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
 
     console.log('Messages pattern: ' + MESSAGES_PATTERN);
     console.log('Aggregate dir: ' + AGGREGATE_DIR)
-    let translator = translatorFunction ? new Translator(translatorFunction) : undefined;
     let defaultMessages = globSync(MESSAGES_PATTERN)
       .map((filename) => fs.readFileSync(filename, 'utf8'))
       .map((file) => JSON.parse(file))
@@ -35,13 +31,12 @@ ReactIntlAggregatePlugin.prototype.apply = function (compiler) {
           if (collection.hasOwnProperty(id)) {
             console.warn(`Duplicate message id: ${id}`);
           }
-          const message = translator ? translator.translate(defaultMessage) : defaultMessage;
           if (format === 'short') {
-            collection[id] = message;
+            collection[id] = defaultMessage;
           } else {
             collection[id] = {};
             collection[id]["id"] = id;
-            collection[id]["defaultMessage"] = message;
+            collection[id]["defaultMessage"] = defaultMessage;
             if (description) {
               collection[id].description = description;
             }
