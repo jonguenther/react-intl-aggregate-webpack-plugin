@@ -12,8 +12,9 @@
     "build": "babel src/ --out-dir ./"
   },
   "devDependencies": {
-    "babel-cli": "^6.10.1",
-    "babel-preset-es2015": "^6.9.0"
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.14.8",
+    "@babel/preset-env": "^7.14.8"
   },
   "dependencies": {
     "intl-messageformat-parser": "^1.4.0",
