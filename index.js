@@ -1,10 +1,5 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ReactIntlAggregatePlugin = void 0;
-
 var fs = _interopRequireWildcard(require("fs"));
 
 var path = _interopRequireWildcard(require("path"));
@@ -75,4 +70,4 @@ class ReactIntlAggregatePlugin {
 
 }
 
-exports.ReactIntlAggregatePlugin = ReactIntlAggregatePlugin;
+module.exports = ReactIntlAggregatePlugin;

@@ -3,7 +3,7 @@ import * as path from 'path';
 import { sync as globSync } from 'glob';
 import { sync as mkdirpSync } from 'mkdirp';
 import Translator from './lib/translator';
-export class ReactIntlAggregatePlugin {
+class ReactIntlAggregatePlugin {
   constructor(options) {
     /** @type {HtmlWebpackOptions} */
     this.plugin_options = options || {};
@@ -63,3 +63,5 @@ export class ReactIntlAggregatePlugin {
     );
   }
 }
+
+module.exports = ReactIntlAggregatePlugin;
