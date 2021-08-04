@@ -31,15 +31,11 @@ export class ReactIntlAggregatePlugin {
           .map((filename) => fs.readFileSync(filename, 'utf8'))
           .map((file) => JSON.parse(file))
           .reduce((collection, descriptors) => {
-            descriptors.forEach(({ id, defaultMessage, description }) => {
+            descriptors.forEach(({ id, defaultMessage }) => {
               if (collection.hasOwnProperty(id)) {
                 console.warn(`Duplicate message id: ${id}`);
               }
-              collection[id] = {};
-              collection[id]["defaultMessage"] = translator ? translator.translate(defaultMessage) : defaultMessage;
-              if (description) {
-                collection[id].description = description;
-              }
+              collection[id]= translator ? translator.translate(defaultMessage) : defaultMessage;              
             });
             return collection;
           }, {});

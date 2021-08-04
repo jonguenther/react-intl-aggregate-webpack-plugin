@@ -81,4 +81,4 @@ class ReactIntlAggregatePlugin {
 
 }
 
-exports.ReactIntlAggregatePlugin = ReactIntlAggregatePlugin;
+module.exports = ReactIntlAggregatePlugin;
